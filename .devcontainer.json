@@ -1,0 +1,9 @@
+{
+    "name": "One Accounts",
+    "dockerComposeFile": "./docker-compose.yml",
+    "service": "backend",
+    "workspaceFolder": "/usr/local/go/src/one-accounts",
+    "settings": {
+        "terminal.integrated.shell.linux": "/bin/sh"
+    },
+}
