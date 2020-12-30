@@ -16,8 +16,9 @@ func getDetails(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		return
 	}
-	vars := mux.Vars(r)
-	responseBody, err := json.Marshal(vars["bank"])
+	var details []models.Detail
+	models.GetAccountDetails(&details)
+	responseBody, err := json.Marshal(details)
 	if err != nil {
 		log.Fatal(err)
 	}

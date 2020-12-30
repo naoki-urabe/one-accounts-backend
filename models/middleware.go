@@ -1,18 +1,20 @@
 package models
 
 import (
+	"fmt"
 	"github.com/jinzhu/gorm"
-	"time"
-	_ "github.com/jinzhu/gorm/dialects/postgres"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"log"
 	"one-accounts/config"
-	"fmt"
+	"time"
 )
 
 type Detail struct {
 	Uuid        string    `json:"uuid"`
 	TradingDay  time.Time `json:"trading_day"`
 	TradingName string    `json:"trading_name"`
+	Payment     int       `json:"payment"`
+	Balance     int       `json:"balance"`
 	Note        string    `json:"note"`
 	Bank        string    `json:"bank"`
 }
@@ -38,7 +40,9 @@ func init() {
 		config.Config.DbPort,
 		config.Config.DbName,
 	)
+	//fmt.Println(dbConnectInfo)
 	Db, err = gorm.Open(config.Config.DbDriverName, dbConnectInfo)
+	// Db, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatalln(err)
 	} else {

@@ -9,16 +9,16 @@ services:
     - .:/usr/local/go/src/one-accounts
     env_file: .env
     depends_on:
-      - postgres
+      - mysql
     ports:
       - 8080:8080
     stdin_open: true
-  postgres:
-    image: postgres:13.1-alpine
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    env_file: .env.dev.db
+  mysql:
+    image: mysql:5.7
+    restart: always
     ports:
-      - 5433:5433
-volumes:
-  postgres_data:
+      - 3306:3306
+    volumes:
+      - ./db/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./db/mysql_data:/var/lib/mysql
+    env_file: .env.dev.db
