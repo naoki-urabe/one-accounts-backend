@@ -11,10 +11,10 @@ import (
 
 type Detail struct {
 	Uuid        string    `json:"uuid"`
-	TradingDay  time.Time `json:"trading_day"`
+	TradingDay  time.Time `json:"trading_day,string"`
 	TradingName string    `json:"trading_name"`
-	Payment     int       `json:"payment"`
-	Balance     int       `json:"balance"`
+	Payment     int       `json:"payment,string"`
+	Balance     int       `json:"balance,string"`
 	Note        string    `json:"note"`
 	Bank        string    `json:"bank"`
 }
@@ -33,7 +33,7 @@ func InsertDetail(detail *Detail) {
 func init() {
 	var err error
 	dbConnectInfo := fmt.Sprintf(
-		`%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local`,
+		`%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local`,
 		config.Config.DbUserName,
 		config.Config.DbUserPassword,
 		config.Config.DbHost,

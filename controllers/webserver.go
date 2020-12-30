@@ -37,6 +37,7 @@ func addDetail(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 	models.InsertDetail(&detail)
+	fmt.Println(detail)
 	responseBody, err := json.Marshal(detail)
 	if err != nil {
 		log.Fatal(err)
