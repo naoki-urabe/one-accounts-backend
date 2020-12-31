@@ -19,7 +19,22 @@ type Detail struct {
 	Bank        string    `json:"bank"`
 }
 
+type Bank struct {
+	SelectId int `json:"select_id,string"`
+	BankName string `json:"bank_name"`
+	CodeName string `json:"code_name"`
+}
+
 var Db *gorm.DB
+
+func GetAllBanks(banks *[]Bank) {
+	Db.Find(&banks)
+}
+
+func InsertBank(bank *Bank) {
+	Db.NewRecord(bank)
+	Db.Create(&bank)
+}
 
 func GetAccountDetails(details *[]Detail) {
 	Db.Find(&details)
@@ -49,6 +64,12 @@ func init() {
 		fmt.Println("Successfully connect database..")
 	}
 	Db.Set("gorm:table_options", "ENGINE = InnoDB").AutoMigrate(&Detail{})
+	if err != nil {
+		fmt.Println(err.Error())
+	} else {
+		fmt.Println("Successfully created table...")
+	}
+	Db.Set("gorm:table_options", "ENGINE = InnoDB").AutoMigrate(&Bank{})
 	if err != nil {
 		fmt.Println(err.Error())
 	} else {

@@ -10,6 +10,35 @@ import (
 	"one-accounts/models"
 )
 
+func getAllBanks(w http.ResponseWriter, r *http.Request) {
+	enableCors(&w)
+	var banks []models.Bank
+	models.GetAllBanks(&banks)
+	responseBody, err := json.Marshal(banks)
+	if err != nil {
+		log.Fatal(err)
+	}
+	w.Write(responseBody)
+}
+
+func addBank(w http.ResponseWriter, r *http.Request) {
+	enableCors(&w)
+	if (*r).Method == "OPTIONS" {
+		return
+	}
+	reqBody, err := ioutil.ReadAll(r.Body)
+	var bank models.Bank
+	if err := json.Unmarshal(reqBody, &bank); err != nil {
+		log.Fatal(err)
+	}
+	models.InsertBank(&bank)
+	responseBody, err := json.Marshal(bank)
+	if err != nil {
+		log.Fatal(err)
+	}
+	w.Write(responseBody)
+}
+
 func getDetails(w http.ResponseWriter, r *http.Request) {
 	enableCors(&w)
 	if r.Method == "OPTIONS" {
@@ -22,7 +51,6 @@ func getDetails(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	w.Header().Set("Content-Type", "application/json")
 	w.Write(responseBody)
 }
 
@@ -56,6 +84,8 @@ func StartWebServer() error {
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/api/accounts/{bank}/details", getDetails).Methods("GET")
 	router.HandleFunc("/api/accounts/{bank}/details", addDetail).Methods("POST","OPTIONS")
+	router.HandleFunc("/api/banks", getAllBanks).Methods("GET")
+	router.HandleFunc("/api/banks", addBank).Methods("POST","OPTIONS")
 	fmt.Println("Listen 8080...")
 	return http.ListenAndServe(fmt.Sprintf(":%d", 8080), router)
 }
